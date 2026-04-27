@@ -5,12 +5,10 @@ import CountryCard from "../components/CountryCard";
 function Home() {
   const [query, setQuery] = useState("");
 
-  // NEW STATE
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // NEW EFFECT (debounced fetch)
   useEffect(() => {
     if (!query) {
       setCountries([]);
