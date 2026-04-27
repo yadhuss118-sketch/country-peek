@@ -1,18 +1,76 @@
-import { Link } from "react-router-dom";
-import "../styles/App.css";
 
-function Header() {
+export default App;
+import { useState, useEffect } from "react";
+import SearchBar from "../components/SearchBar";
+import CountryCard from "../components/CountryCard";
+
+function Home() {
+  const [query, setQuery] = useState("");
+
+  // NEW STATE
+  const [countries, setCountries] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // NEW EFFECT (debounced fetch)
+  useEffect(() => {
+    if (!query) {
+      setCountries([]);
+      setError(null);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setLoading(true);
+
+      fetch(`https://restcountries.com/v3.1/name/${query}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Not found");
+          return res.json();
+        })
+        .then((data) => {
+          setCountries(data);
+          setError(null);
+        })
+        .catch(() => {
+          setCountries([]);
+          setError("No countries found.");
+        })
+        .finally(() => setLoading(false));
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
   return (
-    <header className="header">
-      <Link to="/" className="header__brand">
-        CountryPeek
-      </Link>
-      <nav className="header__nav">
-        <Link to="/">Home</Link>
-        <Link to="/favourites">Favourites</Link>
-      </nav>
-    </header>
+    <div className="home">
+      <SearchBar query={query} onQueryChange={setQuery} />
+
+      {/* Loading */}
+      {loading && <p className="home__status">Loading...</p>}
+
+      {/* Error */}
+      {error && (
+        <p className="home__status home__status--error">{error}</p>
+      )}
+
+      {/* Results */}
+      {!loading && !error && countries.length > 0 && (
+        <div className="cards-grid">
+          {countries.map((country) => (
+            <CountryCard key={country.cca3} country={country} />
+          ))}
+        </div>
+      )}
+
+      {/* Empty state */}
+      {!loading && !error && countries.length === 0 && !query && (
+        <p className="home__status">
+          Start searching to explore countries.
+        </p>
+      )}
+    </div>
   );
 }
 
-export default Header;
+export default Home;
