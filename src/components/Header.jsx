@@ -1,17 +1,22 @@
-import { useTheme } from "../context/ThemeContext";
+import React from "react";
 
-function Header() {
-  const { theme, toggleTheme } = useTheme();
-
+function Header({ theme, toggleTheme }) {
   return (
     <header className="header">
       <h1>CountryPeek</h1>
 
-      <div className="header__nav">
-        <button className="theme-toggle" onClick={toggleTheme}>
+      <nav className="header__nav">
+        <button
+          aria-label={
+            theme === "light"
+              ? "Switch to dark mode"
+              : "Switch to light mode"
+          }
+          onClick={toggleTheme}
+        >
           {theme === "light" ? "Dark Mode" : "Light Mode"}
         </button>
-      </div>
+      </nav>
     </header>
   );
 }

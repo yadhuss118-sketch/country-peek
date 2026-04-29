@@ -1,12 +1,43 @@
-.fav-btn {
-  margin-top: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: gray;
+/* Responsive styles */
+
+@media (max-width: 600px) {
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .header__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
 }
 
-.fav-btn--saved {
-  color: red;
+@media (max-width: 500px) {
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .country-page__layout {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .country-page__details {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Prevent long names breaking layout */
+.card__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
