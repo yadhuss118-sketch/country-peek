@@ -1,32 +1,31 @@
-import { useFavourites } from "../context/FavouritesContext";
+import React from "react";
 
-function CountryCard({ country }) {
-  const { favourites, dispatch } = useFavourites();
-
-  const { cca3 } = country;
-
-  const isSaved = favourites.some((f) => f.cca3 === cca3);
-
-  const handleClick = (e) => {
-    e.stopPropagation();
-
-    if (isSaved) {
-      dispatch({ type: "REMOVE_FAVOURITE", payload: cca3 });
-    } else {
-      dispatch({ type: "ADD_FAVOURITE", payload: country });
-    }
-  };
+function CountryCard({ country, onToggleFavourite, isSaved }) {
+  const { name, flags, population, region, capital } = country;
 
   return (
     <div className="card">
-      {/* existing UI */}
+      <img src={flags.svg} alt={`Flag of ${name.common}`} />
+
+      <h3 className="card__name">{name.common}</h3>
+
+      <p>Population: {population}</p>
+      <p>Region: {region}</p>
+      <p>Capital: {capital?.[0] ?? "N/A"}</p>
 
       <button
-        className={`fav-btn ${isSaved ? "fav-btn--saved" : ""}`}
-        onClick={handleClick}
+        aria-label={
+          isSaved
+            ? `Remove ${name.common} from favourites`
+            : `Save ${name.common} to favourites`
+        }
+        aria-pressed={isSaved}
+        onClick={() => onToggleFavourite(country)}
       >
         {isSaved ? "♥ Saved" : "♡ Save"}
       </button>
     </div>
   );
 }
+
+export default CountryCard;
